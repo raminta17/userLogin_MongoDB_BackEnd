@@ -55,6 +55,8 @@ module.exports = {
         console.log(userPost);
         const findUser = await usersDB.findOne({_id: userPost.id});
         if(!findUser) return res.send({error: true, data: null, message: 'user not found'});
+        const findPostTitle = findUser.posts.find(post => post.title === userPost.title);
+        if(findPostTitle) return res.send({error: true, data: null, message: 'Post with this title already exists'});
         const updateUser = await usersDB.findOneAndUpdate(
             {_id: userPost.id},
             {$push: {posts: {title: userPost.title, postImage: userPost.postImage}}},
