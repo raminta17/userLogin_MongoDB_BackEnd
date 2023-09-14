@@ -26,7 +26,13 @@ module.exports = {
             data: null,
             message: 'Password is incorrect'
         });
-        res.send({error: false, data: foundUser, message: 'Login success'});
+        const userToFrontEnd = {
+            _id: foundUser._id,
+            username: foundUser.username,
+            photo: foundUser.photo,
+            posts: foundUser.posts
+        }
+        res.send({error: false, data: userToFrontEnd, message: 'Login success'});
     },
     updatePhoto: async (req,res) => {
         const {id, photo} = req.body;
@@ -36,7 +42,13 @@ module.exports = {
             {new: true}
         );
         console.log(updateUser);
-        res.send({error: false, data: updateUser, message: 'Update success'});
+        const userToFrontEnd = {
+            _id: updateUser._id,
+            username: updateUser.username,
+            photo: updateUser.photo,
+            posts: updateUser.posts
+        }
+        res.send({error: false, data: userToFrontEnd, message: 'Update success'});
     },
     savePost: async (req,res) => {
         const userPost = req.body;
@@ -48,6 +60,30 @@ module.exports = {
             {$push: {posts: {title: userPost.title, postImage: userPost.postImage}}},
             {new:true}
         )
-        res.send({error: false, data: updateUser, message: 'post saved'});
+        const userToFrontEnd = {
+            _id: updateUser._id,
+            username: updateUser.username,
+            photo: updateUser.photo,
+            posts: updateUser.posts
+        }
+        res.send({error: false, data: userToFrontEnd, message: 'post saved'});
+    },
+    deletePost: async (req,res) => {
+        const {id, title} = req.body;
+        const foundUser = await usersDB.findOne({_id: id});
+        if (!foundUser) return res.send({error: true, data: null, message: 'User not found'});
+        const updateUser = await usersDB.findOneAndUpdate(
+            {_id: id},
+            {$pull: {posts: {title: title}}},
+            {new: true}
+        )
+        console.log(updateUser);
+        const userToFrontEnd = {
+            _id: updateUser._id,
+            username: updateUser.username,
+            photo: updateUser.photo,
+            posts: updateUser.posts
+        }
+        res.send({error: false, data: userToFrontEnd, message: 'post deleted'});
     }
 }
