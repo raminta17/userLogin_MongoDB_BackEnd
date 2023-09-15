@@ -6,7 +6,6 @@ const app = express();
 const port = 8000;
 
 require('dotenv').config();
-
 mongoose.connect(process.env.DB_KEY)
     .then(() => {
         console.log('connected successfully')

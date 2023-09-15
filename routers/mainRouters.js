@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const {validateUser} = require('../middleware/validators')
+const {validateRegister, validateLogin, checkToken} = require('../middleware/validators')
 
 const {
     register,
     login,updatePhoto,savePost,deletePost} = require('../controllers/mainControllers');
 
-router.post('/register', validateUser, register);
-router.post('/login', login);
-router.post('/updatePhoto', updatePhoto);
-router.post('/savePost', savePost);
-router.post('/deletePost', deletePost);
+router.post('/register', validateRegister, register);
+router.post('/login', validateLogin, login);
+router.post('/updatePhoto', checkToken, updatePhoto);
+router.post('/savePost', checkToken, savePost);
+router.post('/deletePost', checkToken, deletePost);
 
 module.exports = router;
