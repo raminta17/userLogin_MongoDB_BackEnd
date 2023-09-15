@@ -85,5 +85,9 @@ module.exports = {
             posts: updateUser.posts
         }
         res.send({error: false, data: userToFrontEnd, message: 'post deleted'});
+    },
+    sendUserInfo: (req,res) => {
+        const user = req.user;
+        res.send({error: false, data: user, message: 'post saved'});
     }
 }
